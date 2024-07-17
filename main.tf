@@ -55,7 +55,7 @@ data "hcp_packer_image" "ubuntu" {
   bucket_name    = data.hcp_packer_iteration.ubuntu.bucket_name
   iteration_id   = data.hcp_packer_iteration.ubuntu.ulid
   cloud_provider = "aws"
-  region         = var.region
+  region         = data.terraform_remote_state.network.outputs.region
 }
 
 #generates private key to use for key pair - FE
