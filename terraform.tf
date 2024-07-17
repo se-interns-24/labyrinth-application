@@ -5,12 +5,12 @@ terraform {
       source  = "hashicorp/aws"
       version = "~> 5.57.0"
     }
-    /*
+    
     hcp = {
       source  = "hashicorp/hcp"
       version = "0.17.0"
     }
-    */
+    
   }
   /*
   cloud {
