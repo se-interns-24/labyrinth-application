@@ -1,8 +1,8 @@
 #defining providers
-/*
+
 provider "hcp" {
 }
-*/
+
 
 data "terraform_remote_state" "network" {
   backend = "remote"
