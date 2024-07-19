@@ -18,8 +18,20 @@ variable "tfc_org_name" {
   default     = "se-intern-project"
 }
 
-variable "tfc_network_workspace_name" {
-  description = "Name of the network workspace"
+variable "tfc_network_dev_workspace" {
+  description = "Name of the network dev workspace"
   type        = string
   default     = "labyrinth-network-dev"
+}
+
+variable "tfc_network_stage_workspace" {
+  description = "Name of the network stage workspace"
+  type        = string
+  default     = "labyrinth-network-stage"
+}
+
+variable "tfc_network_prod_workspace" {
+  description = "Name of the network prod workspace"
+  type        = string
+  default     = "labyrinth-network-prod"
 }
