@@ -85,4 +85,6 @@ resource "aws_db_instance" "labyrinth-db" {
   tags = {
     Name = "Labyrinth Database"
   }
+  
+  lifecycle { prevent_destroy = true }
 }
