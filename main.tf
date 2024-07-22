@@ -30,10 +30,6 @@ module "ec2_instance" {
   key_name = aws_key_pair.labyrinth_kp.key_name
   ami = data.hcp_packer_image.ubuntu.cloud_image_id
 
-  /*
-  vpc_security_group_ids = [aws_security_group.sg.id]
-  subnet_id = aws_subnet.subnet.id
-  */
   subnet_id              = data.terraform_remote_state.network.outputs.subnet_id[0]
   vpc_security_group_ids = data.terraform_remote_state.network.outputs.security_group_id
 
@@ -70,4 +66,23 @@ locals {
 resource "aws_key_pair" "labyrinth_kp" {
   key_name   = local.private_key_filename
   public_key = tls_private_key.labyrinth.public_key_openssh
+}
+
+resource "aws_db_instance" "labyrinth-db" {
+  allocated_storage                     = 20
+  db_subnet_group_name                  = "default-vpc-030a7c3e499b604ca"
+  engine                                = "mysql"
+  engine_version                        = "8.0.35"
+  identifier                            = "labyrinth-db"
+  instance_class                        = "db.m6gd.large"
+  parameter_group_name                  = "default.mysql8.0"
+  password                              = null # sensitive
+  publicly_accessible                   = false
+  skip_final_snapshot                   = true
+  username                              = "admin"
+  vpc_security_group_ids                = data.terraform_remote_state.network.outputs.security_group_id
+
+  tags = {
+    Name = "Labyrinth Database"
+  }
 }
