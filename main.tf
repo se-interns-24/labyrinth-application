@@ -69,14 +69,5 @@ resource "aws_key_pair" "labyrinth_kp" {
 }
 
 data "aws_db_instance" "database" {
-
-  allocated_storage                     = 20
-  engine                                = "mysql"
-  engine_version                        = "8.0.35"
-  publicly_accessible                   = false
-  vpc_security_groups                = [data.terraform_remote_state.network.outputs.security_group_id]
-
-  tags = {
-    Name = "Labyrinth Database"
-  }
+  db_instance_identifier = "labyrinth-db"
 }
