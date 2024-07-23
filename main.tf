@@ -35,6 +35,8 @@ module "ec2_instance" {
 
   associate_public_ip_address = true
 
+  user_data = <<-EOF #!/bin/bash echo "DB_ENDPOINT=${data.aws_db_instance.labyrinth_db.endpoint}" >> /etc/environment echo "DB_PORT=${data.aws_db_instance.labyrinth_db.port}" >> /etc/environment echo "DB_NAME=${data.aws_db_instance.labyrinth_db.db_name}" >> /etc/environment echo "DB_USERNAME=${data.aws_db_instance.labyrinth_db.username}" >> /etc/environment echo "DB_PASSWORD=your_db_password" >> /etc/environment EOF
+
   tags = {
     Name = "MyEC2Instances"
   }
@@ -68,6 +70,6 @@ resource "aws_key_pair" "labyrinth_kp" {
   public_key = tls_private_key.labyrinth.public_key_openssh
 }
 
-data "aws_db_instance" "database" {
+data "aws_db_instance" "labyrinth-db" {
   db_instance_identifier = "labyrinth-db"
 }
