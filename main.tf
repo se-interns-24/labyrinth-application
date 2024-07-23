@@ -68,23 +68,15 @@ resource "aws_key_pair" "labyrinth_kp" {
   public_key = tls_private_key.labyrinth.public_key_openssh
 }
 
-resource "aws_db_instance" "labyrinth-db" {
+data "aws_db_instance" "database" {
+
   allocated_storage                     = 20
-  db_subnet_group_name                  = "default-vpc-030a7c3e499b604ca"
   engine                                = "mysql"
   engine_version                        = "8.0.35"
-  identifier                            = "labyrinth-db"
-  instance_class                        = "db.m6gd.large"
-  parameter_group_name                  = "default.mysql8.0"
-  password                              = null # sensitive
   publicly_accessible                   = false
-  skip_final_snapshot                   = true
-  username                              = "admin"
-  vpc_security_group_ids                = data.terraform_remote_state.network.outputs.security_group_id
+  vpc_security_groups                = [data.terraform_remote_state.network.outputs.security_group_id]
 
   tags = {
     Name = "Labyrinth Database"
   }
-  
-  lifecycle { prevent_destroy = true }
 }
