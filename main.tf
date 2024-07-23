@@ -35,8 +35,6 @@ module "ec2_instance" {
 
   associate_public_ip_address = true
 
-  user_data = <<-EOF #!/bin/bash echo "DB_ENDPOINT=${data.aws_db_instance.labyrinth_db.endpoint}" >> /etc/environment echo "DB_PORT=${data.aws_db_instance.labyrinth_db.port}" >> /etc/environment echo "DB_NAME=${data.aws_db_instance.labyrinth_db.db_name}" >> /etc/environment echo "DB_USERNAME=${data.aws_db_instance.labyrinth_db.username}" >> /etc/environment echo "DB_PASSWORD=your_db_password" >> /etc/environment EOF
-
   tags = {
     Name = "MyEC2Instances"
   }
@@ -70,6 +68,21 @@ resource "aws_key_pair" "labyrinth_kp" {
   public_key = tls_private_key.labyrinth.public_key_openssh
 }
 
-data "aws_db_instance" "labyrinth-db" {
-  db_instance_identifier = "labyrinth-db"
+resource "aws_db_instance" "labyrinth-db" {
+  allocated_storage                     = 20
+  db_subnet_group_name                  = data.terraform_remote_state.network.outputs.subnet_group_name
+  engine                                = "mysql"
+  engine_version                        = "8.0.35"
+  identifier                            = "labyrinth-db"
+  instance_class                        = "db.m6gd.large"
+  parameter_group_name                  = "default.mysql8.0"
+  password                              = null # sensitive
+  publicly_accessible                   = false
+  skip_final_snapshot                   = true
+  username                              = "admin"
+  vpc_security_group_ids                = data.terraform_remote_state.network.outputs.rds_security_group_id
+
+  tags = {
+    Name = "Labyrinth Database"
+  }
 }
