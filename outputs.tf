@@ -10,19 +10,19 @@ output "app_url" {
 }
 
 output "db_instance_endpoint" { 
-value = data.aws_db_instance.labyrinth-db.endpoint 
+value = aws_db_instance.labyrinth-db.endpoint 
 } 
 
 output "db_instance_port" { 
-value = data.aws_db_instance.labyrinth-db.port 
+value = aws_db_instance.labyrinth-db.port 
 } 
 
 output "db_instance_name" { 
-value = data.aws_db_instance.labyrinth-db.db_name 
+value = aws_db_instance.labyrinth-db.db_name 
 } 
 
 output "db_instance_username" { 
-value = data.aws_db_instance.labyrinth-db.username 
+value = aws_db_instance.labyrinth-db.username 
 }
 
 
