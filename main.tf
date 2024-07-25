@@ -77,7 +77,7 @@ resource "aws_db_instance" "labyrinth-db" {
   identifier                            = "labyrinth-db"
   instance_class                        = "db.m6gd.large"
   parameter_group_name                  = "default.mysql8.0"
-  password                              = null # sensitive
+  password                              = "HashicorpInterns2024!"
   publicly_accessible                   = false
   skip_final_snapshot                   = true
   username                              = "admin"
