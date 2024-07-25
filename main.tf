@@ -62,6 +62,7 @@ resource "tls_private_key" "labyrinth" {
 locals {
   private_key_filename = "labyrinth-key.pem"
 }
+
 #creates key pair used to access ec2 instance - FE
 resource "aws_key_pair" "labyrinth_kp" {
   key_name   = local.private_key_filename
@@ -70,7 +71,8 @@ resource "aws_key_pair" "labyrinth_kp" {
 
 resource "aws_db_instance" "labyrinth-db" {
   allocated_storage                     = 20
-  db_subnet_group_name                  = data.terraform_remote_state.network.outputs.subnet_group_name
+  copy_tags_to_snapshot                 = true
+  db_subnet_group_name                  = "default-vpc-030a7c3e499b604ca"
   engine                                = "mysql"
   engine_version                        = "8.0.35"
   identifier                            = "labyrinth-db"
@@ -80,9 +82,6 @@ resource "aws_db_instance" "labyrinth-db" {
   publicly_accessible                   = false
   skip_final_snapshot                   = true
   username                              = "admin"
-  vpc_security_group_ids                = data.terraform_remote_state.network.outputs.rds_security_group_id
+  vpc_security_group_ids                = ["sg-0a205ab2c90506db7"]
 
-  tags = {
-    Name = "Labyrinth Database"
-  }
 }
