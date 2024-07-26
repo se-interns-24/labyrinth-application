@@ -68,7 +68,7 @@ resource "aws_key_pair" "labyrinth_kp" {
   key_name   = local.private_key_filename
   public_key = tls_private_key.labyrinth.public_key_openssh
 }
-
+/*
 resource "aws_db_instance" "labyrinth-db" {
   allocated_storage                     = 20
   db_subnet_group_name                  = data.terraform_remote_state.network.outputs.subnet_group_name
@@ -86,4 +86,4 @@ resource "aws_db_instance" "labyrinth-db" {
   tags = {
     Name = "Labyrinth Database"
   }
-}
+}*/
