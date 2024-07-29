@@ -9,7 +9,9 @@ output "app_url" {
   value = "http://${module.ec2_instance.public_ip}"
 }
 
-
+output "instance-id" {
+  value = aws_instance.this.id
+}
 
 
 
