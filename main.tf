@@ -33,7 +33,7 @@ module "ec2_instance" {
   subnet_id              = data.terraform_remote_state.network.outputs.subnet_id[0]
   vpc_security_group_ids = data.terraform_remote_state.network.outputs.security_group_id
 
-  associate_public_ip_address = true
+  #associate_public_ip_address = true
 
   tags = {
     Name = "MyEC2Instances"
@@ -68,6 +68,18 @@ resource "aws_key_pair" "labyrinth_kp" {
   key_name   = local.private_key_filename
   public_key = tls_private_key.labyrinth.public_key_openssh
 }
+
+# Defines the Elastic IP
+resource "aws_eip" "labyrinth-eip" {
+  domain = "vpc"
+}
+
+# Associates the Elastic IP with the EC2 instance
+resource "aws_eip_association" "eip_assoc" {
+  instance_id   = module.ec2_instance.instance_id
+  allocation_id = aws_eip.labyrinth-eip.id
+}
+
 /*
 resource "aws_db_instance" "labyrinth-db" {
   allocated_storage                     = 20
