@@ -72,6 +72,10 @@ resource "aws_key_pair" "labyrinth_kp" {
 # Defines the Elastic IP
 resource "aws_eip" "labyrinth-eip" {
   domain = "vpc"
+
+  tags = {
+    Name = "MyEC2Instances"
+  }
 }
 
 # Associates the Elastic IP with the EC2 instance
