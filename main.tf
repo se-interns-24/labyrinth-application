@@ -76,7 +76,7 @@ resource "aws_eip" "labyrinth-eip" {
 
 # Associates the Elastic IP with the EC2 instance
 resource "aws_eip_association" "eip_assoc" {
-  instance_id   = module.ec2_instance.instance_id
+  instance_id   = module.ec2_instance.id
   allocation_id = aws_eip.labyrinth-eip.id
 }
 
