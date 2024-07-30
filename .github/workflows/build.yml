@@ -1,42 +1,65 @@
-name: Packer Build
+name: Packer Build 
 
 on:
   push:
     branches:
-      - 'dev'
-      - 'stage'
-      - 'main'  # target branch
+      - "dev"
+      - "stage"
+      - "main"
+
+env:
+  HCP_CLIENT_ID: ${{ secrets.HCP_CLIENT_ID }}
+  HCP_CLIENT_SECRET: ${{ secrets.HCP_CLIENT_SECRET }}
+  HCP_PROJECT_ID: ${{ secrets.HCP_PROJECT_ID }}
+  HCP_ORGANIZATION_ID: ${{ secrets.HCP_ORGANIZATION_ID }}
+  HCP_BUCKET_NAME: "gameDemo-1"
 
 jobs:
-  packer-build:
+  packer:
     runs-on: ubuntu-latest
+    outputs:
+      version_fingerprint: ${{ steps.hcp.outputs.version_fingerprint }}
 
     steps:
-      - name: Checkout repository
+      - name: Checkout Repository
         uses: actions/checkout@v2
 
-      - name: Set up HashiCorp Packer
-        uses: hashicorp/setup-packer@v2
-        with:
-          packer_version: latest
-
-      - name: Install dependencies
+      - name: Set up Packer
         run: |
-          sudo apt-get update
-          sudo apt-get install -y unzip
+          curl -L "https://releases.hashicorp.com/packer/1.7.8/packer_1.7.8_linux_amd64.zip" -o "packer.zip"
+          rm -rf packer # Remove any existing 'packer' directory or file
+          unzip -o packer.zip
+          sudo mv packer /usr/local/bin/
 
-      - name: Set up AWS credentials
-        uses: aws-actions/configure-aws-credentials@v1
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: us-east-2
+      - name: Validate Packer Template
+        run: packer validate game.pkr.hcl # Update this path if the file is in a different directory
 
-      - name: Run Packer
-        run: packer build .
+      - name: Build Packer Image
+        run: packer build game.pkr.hcl # Update this path if the file is in a different directory
 
-      - name: Upload Packer Manifest
-        uses: actions/upload-artifact@v2
-        with:
-          name: packer-manifest
-          path: packer_manifest.json
+      - name: Extract AMI ID
+        id: extract_ami_id
+        run: |
+          AMI_ID=$(packer build -machine-readable game.pkr.hcl | awk -F, '$0 ~/artifact,0,id/ {print $6}')
+          echo "AMI_ID=$AMI_ID" >> $GITHUB_ENV
+
+      - name: Get HCP Packer Version Fingerprint from Packer Manifest
+        id: hcp
+        run: |
+          last_run_uuid=$(jq -r '.last_run_uuid' "./packer_manifest.json")
+          build=$(jq -r '.builds[] | select(.packer_run_uuid == "'"$last_run_uuid"'")' "./packer_manifest.json")
+          version_fingerprint=$(echo "$build" | jq -r '.custom_data.version_fingerprint')
+          echo "::set-output name=version_fingerprint::$version_fingerprint"
+
+  update-hcp-packer-channel:
+    name: Update HCP Packer Channel
+    needs: ["packer"]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Create and Set Channel
+        working-directory: .github/scripts
+        run: |
+          ./create_channel_version.sh $HCP_BUCKET_NAME latest "${{ needs.packer.outputs.version_fingerprint }}"
