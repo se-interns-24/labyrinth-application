@@ -40,7 +40,7 @@ module "ec2_instance" {
   associate_public_ip_address = true
 
   tags = {
-    Name = "MyEC2Instances"
+    Name = "MyEC2Instances1"
   }
 
 }
@@ -71,3 +71,9 @@ resource "aws_key_pair" "labyrinth_kp" {
   key_name   = local.private_key_filename
   public_key = tls_private_key.labyrinth.public_key_openssh
 }
+
+resource "aws_key_pair" "test" {
+  key_name   = local.private_key_filename
+  public_key = tls_private_key.labyrinth.public_key_openssh
+}
+
