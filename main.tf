@@ -30,14 +30,8 @@ module "ec2_instance" {
   key_name = aws_key_pair.labyrinth_kp.key_name
   ami = data.hcp_packer_image.ubuntu.cloud_image_id
 
-  /*
-  vpc_security_group_ids = [aws_security_group.sg.id]
-  subnet_id = aws_subnet.subnet.id
-  */
   subnet_id              = data.terraform_remote_state.network.outputs.subnet_id[0]
   vpc_security_group_ids = data.terraform_remote_state.network.outputs.security_group_id
-
-  associate_public_ip_address = true
 
   tags = {
     Name = "MyEC2Instances"
@@ -66,8 +60,24 @@ resource "tls_private_key" "labyrinth" {
 locals {
   private_key_filename = "labyrinth-key.pem"
 }
+
 #creates key pair used to access ec2 instance - FE
 resource "aws_key_pair" "labyrinth_kp" {
   key_name   = local.private_key_filename
   public_key = tls_private_key.labyrinth.public_key_openssh
+}
+
+# Defines the Elastic IP
+resource "aws_eip" "labyrinth-eip" {
+  domain = "vpc"
+
+  tags = {
+    Name = "MyEC2Instances"
+  }
+}
+
+# Associates the Elastic IP with the EC2 instance
+resource "aws_eip_association" "eip_assoc" {
+  instance_id   = module.ec2_instance.id
+  allocation_id = aws_eip.labyrinth-eip.id
 }
