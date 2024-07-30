@@ -54,6 +54,14 @@ build {
   provisioner "shell" {
     inline = ["/tmp/install_game.sh"]
   }
+
+  post-processor "manifest" {
+    output     = "packer_manifest.json"
+    strip_path = true
+    custom_data = {
+      version_fingerprint = packer.versionFingerprint
+    }
+  }
 }
 
 
