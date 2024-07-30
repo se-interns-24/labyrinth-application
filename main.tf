@@ -33,8 +33,6 @@ module "ec2_instance" {
   subnet_id              = data.terraform_remote_state.network.outputs.subnet_id[0]
   vpc_security_group_ids = data.terraform_remote_state.network.outputs.security_group_id
 
-  #associate_public_ip_address = true
-
   tags = {
     Name = "MyEC2Instances"
   }
@@ -83,23 +81,3 @@ resource "aws_eip_association" "eip_assoc" {
   instance_id   = module.ec2_instance.id
   allocation_id = aws_eip.labyrinth-eip.id
 }
-
-/*
-resource "aws_db_instance" "labyrinth-db" {
-  allocated_storage                     = 20
-  db_subnet_group_name                  = data.terraform_remote_state.network.outputs.subnet_group_name
-  engine                                = "mysql"
-  engine_version                        = "8.0.35"
-  identifier                            = "labyrinth-db"
-  instance_class                        = "db.m6gd.large"
-  parameter_group_name                  = "default.mysql8.0"
-  password                              = "HashicorpInterns2024"
-  publicly_accessible                   = false
-  skip_final_snapshot                   = true
-  username                              = "admin"
-  vpc_security_group_ids                = data.terraform_remote_state.network.outputs.rds_security_group_id
-
-  tags = {
-    Name = "Labyrinth Database"
-  }
-}*/
