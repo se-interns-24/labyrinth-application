@@ -40,7 +40,7 @@ module "ec2_instance" {
   associate_public_ip_address = true
 
   tags = {
-    Name = "MyEC2Instances"
+    Name = "MyEC2Instances1"
   }
 
 }
