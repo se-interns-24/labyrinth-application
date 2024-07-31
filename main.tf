@@ -105,4 +105,5 @@ module "autoscaling" {
   desired_capacity      = 1
   health_check_type     = "EC2"
   vpc_zone_identifier   = [data.terraform_remote_state.network.outputs.subnet_id[0]]
+  instance_type = var.instance_type
 }
