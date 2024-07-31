@@ -86,8 +86,8 @@ resource "aws_lb" "nlb" {
   name               = var.nlb_name
   internal           = var.nlb_internal
   load_balancer_type = "network"
-  security_groups    = [data.terraform_remote_state.network.outputs.security_group_id]
-  subnets            = data.terraform_remote_state.network.outputs.subnet_id[0]
+  security_groups    = data.terraform_remote_state.network.outputs.security_group_id
+  subnets            = [data.terraform_remote_state.network.outputs.subnet_id[0]]
 
   enable_deletion_protection = var.enable_deletion_protection
 }
