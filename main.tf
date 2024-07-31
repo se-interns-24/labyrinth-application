@@ -82,44 +82,6 @@ resource "aws_eip_association" "eip_assoc" {
   allocation_id = aws_eip.labyrinth-eip.id
 }
 
-resource "aws_lb" "nlb" {
-  name               = var.nlb_name
-  internal           = var.nlb_internal
-  load_balancer_type = "network"
-  security_groups    = data.terraform_remote_state.network.outputs.security_group_id
-  subnets            = [data.terraform_remote_state.network.outputs.subnet_id[0], data.terraform_remote_state.network.outputs.subnet_id_b[0]]
-
-  enable_deletion_protection = var.enable_deletion_protection
-}
-
-resource "aws_lb_target_group" "nlb_tg" {
-  name     = "nlb-tg"
-  port     = 80
-  protocol = "TCP"
-  vpc_id   = data.terraform_remote_state.network.outputs.vpc_id
-
-  health_check {
-    interval            = 30
-    protocol            = "TCP"
-    timeout             = 10
-    healthy_threshold   = 3
-    unhealthy_threshold = 2
-  }
-
-}
-
-resource "aws_lb_listener" "nlb_listener" {
-  load_balancer_arn = aws_lb.nlb.arn
-  port              = "80"
-  protocol          = "TCP"
-
-  default_action {
-    type             = "forward"
-    target_group_arn = aws_lb_target_group.nlb_tg.arn
-  }
-}
-
-
 
 module "alb" {
   source  = "terraform-aws-modules/alb/aws"
