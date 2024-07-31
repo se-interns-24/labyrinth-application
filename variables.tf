@@ -24,6 +24,5 @@ variable "tfc_network_workspace_name" {
 }
 
 variable "region" {
-  description = "AWS region"
-  default = data.terraform_remote_state.network.outputs.region
+  description = "AWS region
 }
