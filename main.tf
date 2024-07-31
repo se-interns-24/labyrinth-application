@@ -113,5 +113,5 @@ module "autoscaling" {
 resource "aws_launch_template" "my_template" {
   name          = "my-launch-template"
   //image_id       = "ami-0abcdef1234567890" # Replace with you
-  instance_type = var.instance_type
+  instance_type = t2.micro
 }
