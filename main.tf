@@ -108,7 +108,6 @@ resource "aws_lb_target_group" "nlb_tg" {
     unhealthy_threshold = 2
   }
 
-  tags = var.tags
 }
 
 resource "aws_lb_listener" "nlb_listener" {
