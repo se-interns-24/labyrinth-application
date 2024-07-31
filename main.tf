@@ -119,10 +119,16 @@ resource "aws_lb_listener" "nlb_listener" {
   }
 }
 
-output "nlb_arn" {
-  value = aws_lb.nlb.arn
-}
 
-output "nlb_dns_name" {
-  value = aws_lb.nlb.dns_name
+
+module "alb" {
+  source  = "terraform-aws-modules/alb/aws"
+  version = "9.9.0"
+
+  name                       = var.alb_name
+  internal                   = var.alb_internal
+  security_groups            = [data.aws_security_group.default.id]
+  subnets                    = data.aws_subnets.selected.ids
+  enable_deletion_protection = var.enable_deletion_protection
+  tags                       = var.tags
 }
