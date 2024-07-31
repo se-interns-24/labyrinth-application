@@ -104,7 +104,5 @@ module "autoscaling" {
   max_size              = 2
   desired_capacity      = 1
   health_check_type     = "EC2"
-  vpc_zone_identifier   = data.aws_subnets.selected.ids
-  launch_template_id    = aws_launch_template.example.id
-  launch_template_version = "$Latest"
+  //vpc_zone_identifier   = data.aws_subnets.selected.ids
 }
