@@ -106,14 +106,14 @@ module "autoscaling" {
   health_check_type     = "EC2"
   vpc_zone_identifier   = [data.terraform_remote_state.network.outputs.subnet_id[0]]
   //instance_type = var.instance_type
-  launch_template_id = aws_launch_template.my_template.id
+  //launch_template_id = aws_launch_template.my_template.id
   instance_type = "t2.micro"
   image_id       = data.hcp_packer_image.ubuntu.cloud_image_id
 }
 
-
+/*
 resource "aws_launch_template" "my_template" {
   name          = "my-launch-template"
   image_id       = data.hcp_packer_image.ubuntu.cloud_image_id
   instance_type = "t2.micro"
-}
+}*/
