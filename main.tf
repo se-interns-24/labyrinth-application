@@ -111,7 +111,7 @@ module "autoscaling" {
   launch_template = {
     id      = aws_launch_template.my_template.id
     version = "$Latest" # Use "$Latest" or specify a specific version
-  }*//
+  }*/
 }
 
 
