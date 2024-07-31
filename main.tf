@@ -88,6 +88,7 @@ module "alb" {
   version = "9.9.0"
 
   name                       = var.alb_name
+  vpc_id   = data.terraform_remote_state.network.outputs.vpc_id
   internal                   = var.alb_internal
   security_groups            = data.terraform_remote_state.network.outputs.security_group_id
   subnets            = [data.terraform_remote_state.network.outputs.subnet_id[0], data.terraform_remote_state.network.outputs.subnet_id_b[0]]
