@@ -108,6 +108,7 @@ module "autoscaling" {
   //instance_type = var.instance_type
   launch_template_id = aws_launch_template.my_template.id
   instance_type = "t2.micro"
+  image_id       = data.hcp_packer_image.ubuntu.cloud_image_id
 }
 
 
