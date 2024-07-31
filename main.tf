@@ -95,3 +95,20 @@ module "alb" {
   enable_deletion_protection = var.enable_deletion_protection
 }
 
+module "autoscaling" {
+  source  = "terraform-aws-modules/autoscaling/aws"
+  version = "7.7.0"
+
+  name                  = "my-autoscaling-group"
+  min_size              = 0
+  max_size              = 2
+  desired_capacity      = 1
+  health_check_type     = "EC2"
+  vpc_zone_identifier   = data.aws_subnets.selected.ids
+
+
+  launch_template = {
+    id      = aws_launch_template.example.id
+    version = "$Latest"
+  }
+}
