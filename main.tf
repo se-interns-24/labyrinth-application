@@ -105,5 +105,16 @@ module "autoscaling" {
   desired_capacity      = 1
   health_check_type     = "EC2"
   vpc_zone_identifier   = [data.terraform_remote_state.network.outputs.subnet_id[0]]
+  //instance_type = var.instance_type
+  launch_template       = {
+    id      = aws_launch_template.my_template.id
+    version = "$Latest"
+  }
+}
+
+
+resource "aws_launch_template" "my_template" {
+  name          = "my-launch-template"
+  //image_id       = "ami-0abcdef1234567890" # Replace with you
   instance_type = var.instance_type
 }
