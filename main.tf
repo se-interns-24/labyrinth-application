@@ -90,8 +90,6 @@ resource "aws_lb" "nlb" {
   subnets            = data.terraform_remote_state.network.outputs.subnet_id[0]
 
   enable_deletion_protection = var.enable_deletion_protection
-
-  tags = var.tags
 }
 
 resource "aws_lb_target_group" "nlb_tg" {
