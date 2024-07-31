@@ -127,8 +127,7 @@ module "alb" {
 
   name                       = var.alb_name
   internal                   = var.alb_internal
-  security_groups            = [data.aws_security_group.default.id]
-  subnets                    = data.aws_subnets.selected.ids
+  security_groups            = data.terraform_remote_state.network.outputs.security_group_id
+  subnets                    = [data.terraform_remote_state.network.outputs.subnet_id[0]]
   enable_deletion_protection = var.enable_deletion_protection
-  tags                       = var.tags
 }
