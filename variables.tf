@@ -22,3 +22,18 @@ variable "tfc_network_workspace_name" {
   description = "Name of the network workspace"
   type        = string
 }
+
+variable "nlb_name" {
+  description = "The name of the NLB"
+  default = "my-nlb"
+}
+
+variable "nlb_internal" {
+  description = "Whether the NLB is internal"
+  default     = false
+}
+
+variable "enable_deletion_protection" {
+  description = "Whether to enable deletion protection for the NLB"
+  default     = false
+}
