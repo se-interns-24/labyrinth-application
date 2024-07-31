@@ -104,5 +104,5 @@ module "autoscaling" {
   max_size              = 2
   desired_capacity      = 1
   health_check_type     = "EC2"
-  //vpc_zone_identifier   = data.aws_subnets.selected.ids
+  vpc_zone_identifier   = [data.terraform_remote_state.network.outputs.subnet_id[0]]
 }
