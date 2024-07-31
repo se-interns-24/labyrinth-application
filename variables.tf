@@ -24,5 +24,5 @@ variable "tfc_network_workspace_name" {
 }
 
 variable "region" {
-  description = "AWS region'
+  description = "AWS region"
 }
