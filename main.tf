@@ -90,6 +90,6 @@ module "alb" {
   name                       = var.alb_name
   internal                   = var.alb_internal
   security_groups            = data.terraform_remote_state.network.outputs.security_group_id
-  subnets                    = [data.terraform_remote_state.network.outputs.subnet_id[0]]
+  subnets            = [data.terraform_remote_state.network.outputs.subnet_id[0], data.terraform_remote_state.network.outputs.subnet_id_b[0]]
   enable_deletion_protection = var.enable_deletion_protection
 }
