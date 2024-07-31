@@ -107,11 +107,6 @@ module "autoscaling" {
   vpc_zone_identifier   = [data.terraform_remote_state.network.outputs.subnet_id[0]]
   //instance_type = var.instance_type
   launch_template_id = aws_launch_template.my_template.id
-//*
-  launch_template = {
-    id      = aws_launch_template.my_template.id
-    version = "$Latest" # Use "$Latest" or specify a specific version
-  }*/
 }
 
 
