@@ -112,6 +112,6 @@ module "autoscaling" {
 
 resource "aws_launch_template" "my_template" {
   name          = "my-launch-template"
-  //image_id       = "ami-0abcdef1234567890" # Replace with you
+  image_id       = data.hcp_packer_image.ubuntu.cloud_image_id
   instance_type = "t2.micro"
 }
