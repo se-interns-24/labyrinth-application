@@ -86,8 +86,8 @@ resource "aws_lb" "nlb" {
   name               = var.nlb_name
   internal           = var.nlb_internal
   load_balancer_type = "network"
-  security_groups    = [data.aws_security_group.default.id]
-  subnets            = data.aws_subnets.selected.ids
+  security_groups    = [data.terraform_remote_state.network.outputs.security_group_id]
+  subnets            = data.terraform_remote_state.network.outputs.subnet_id[0]
 
   enable_deletion_protection = var.enable_deletion_protection
 
@@ -98,7 +98,7 @@ resource "aws_lb_target_group" "nlb_tg" {
   name     = "nlb-tg"
   port     = 80
   protocol = "TCP"
-  vpc_id   = data.aws_vpc.selected.id
+  vpc_id   = data.terraform_remote_state.network.outputs.vpc_id
 
   health_check {
     interval            = 30
