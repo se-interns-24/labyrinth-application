@@ -8,7 +8,6 @@ variable "instance_name" {
 }
 variable "hcp_bucket_ubuntu" {
   description = "The Bucket where our AMI is listed."
-  default     = "labyrinth-stage"
 }
 variable "cloud_provider" {
   description = "Cloud provider"
@@ -16,7 +15,6 @@ variable "cloud_provider" {
 }
 variable "hcp_channel" {
   description = "HCP Packer channel name"
-  default     = "labyrinth-channel-stage"
 }
 variable "algorithm" {
   description = "Private key algorithm"
